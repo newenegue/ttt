@@ -1,4 +1,6 @@
+//--------------------------------------------------
 //---Initialize global variables---
+//--------------------------------------------------
 // player toggle
 var p = 0;
 // p0 is always user
@@ -24,6 +26,12 @@ winningCombos = new Array(
 // higher is better
 cellRank = [3,2,3,2,4,2,3,2,3];
 
+
+//--------------------------------------------------
+// markCell()
+// change the color of a cell based on the player
+// adds a new class to the cell div
+//--------------------------------------------------
 function markCell(player, cell_id) {
 	if(player == 0){
 		// add class to html div
@@ -41,6 +49,10 @@ function markCell(player, cell_id) {
 	}
 }
 
+//--------------------------------------------------
+// switchUser()
+// switch user turn
+//--------------------------------------------------
 function switchUser(player) {
 	if (player == 0) {
 		p = 1;
@@ -50,11 +62,20 @@ function switchUser(player) {
 	}
 }
 
+//--------------------------------------------------
+// demoteCell()
+// AI cell rank demotion
+// for selected cell
+//--------------------------------------------------
 function demoteCell(cell_id) {
 	cellRank[cell_id] -= 99;
 }
 
-function checkCell(cell_id) {
+//--------------------------------------------------
+// emptyCell()
+// check if cell is already selected by a player
+//--------------------------------------------------
+function emptyCell(cell_id) {
 	if(document.getElementById(cell_id).classList.contains('p0') || document.getElementById(cell_id).classList.contains('p1')){
 		return false;
 	}
@@ -63,13 +84,20 @@ function checkCell(cell_id) {
 	}
 }
 
+//--------------------------------------------------
+// checkWinner()
+// check for winning conditions
+//--------------------------------------------------
 function checkWinner() {
+	var winner = false;
 	for(i=0; i<winningCombos.length; i++) {
 		// check if p0 wins
 		if(p0[0] == winningCombos[i][0]) {
 			if(p0[1] == winningCombos[i][1]) {
 				if(p0[2] == winningCombos[i][2]) {
 					alert('p0 wins');
+					winner = true;
+					return winner;
 				}
 			}
 		}
@@ -78,15 +106,35 @@ function checkWinner() {
 			if(p1[1] == winningCombos[i][1]) {
 				if(p1[2] == winningCombos[i][2]) {
 					alert('p1 wins');
+					winner = true;
+					return winner;
 				}
 			}
 		}
 	}
 }
 
+//--------------------------------------------------
+// resetAll()
+// Re-initialize and reset board
+//--------------------------------------------------
+function resetAll() {
+	for(i = 0; i <= 8; i++){
+		document.getElementById(i).className = "cell";
+	}
+	cellRank = [3,2,3,2,4,2,3,2,3];
+	p0 = new Array();
+	p1 = new Array();
+	p = 0;
+}
+
+//--------------------------------------------------
+// clickCell()
+// on click of cell
+//--------------------------------------------------
 function clickCell(id) {
 	// display player selection
-	if(checkCell(id) == true) {
+	if(emptyCell(id) == true) {
 		// single player
 		if(pNum == 1){
 			markCell(p, id);
@@ -94,9 +142,12 @@ function clickCell(id) {
 			var aiCell = cellRank.indexOf(Math.max.apply(Math, cellRank));
 			markCell(1, aiCell);
 			demoteCell(aiCell);
+			
 			p0.sort();
 			p1.sort();
-			checkWinner();
+			if(checkWinner()) {
+				resetAll();
+			}
 		}
 		// two player
 		else if(pNum == 2) {
@@ -111,8 +162,9 @@ function clickCell(id) {
 			if(p0.length >= 3 || p1.length >= 3){
 				p0.sort();
 				p1.sort();
-				checkWinner();
-				// checkWinner(p1);
+				if(checkWinner()) {
+					resetAll();
+				}
 			}
 		}
 	}
