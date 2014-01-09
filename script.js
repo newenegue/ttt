@@ -5,7 +5,8 @@ var p = 0;
 var p0 = new Array();
 var p1 = new Array();
 
-var pNum = 2;
+// number of player toggle
+var pNum = 1;
 
 // all possible winning combinations
 winningCombos = new Array(
@@ -23,73 +24,100 @@ winningCombos = new Array(
 // higher is better
 cellRank = [3,2,3,2,4,2,3,2,3];
 
+function markCell(player, cell_id) {
+	if(player == 0){
+		// add class to html div
+		document.getElementById(cell_id).className += " p0";
+
+		// add to p0 array
+		p0.push(parseInt(cell_id,10));
+	}
+	else if(player == 1) {
+		// add class to html div
+		document.getElementById(cell_id).className += " p1";
+
+		// add to p1 array
+		p1.push(parseInt(cell_id,10));
+	}
+}
+
+function switchUser(player) {
+	if (player == 0) {
+		p = 1;
+	}
+	else if (player == 1) {
+		p = 0;
+	}
+}
+
+function demoteCell(cell_id) {
+	cellRank[cell_id] -= 99;
+}
+
+function checkCell(cell_id) {
+	if(document.getElementById(cell_id).classList.contains('p0') || document.getElementById(cell_id).classList.contains('p1')){
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+function checkWinner() {
+	for(i=0; i<winningCombos.length; i++) {
+		// check if p0 wins
+		if(p0[0] == winningCombos[i][0]) {
+			if(p0[1] == winningCombos[i][1]) {
+				if(p0[2] == winningCombos[i][2]) {
+					alert('p0 wins');
+				}
+			}
+		}
+		// check if p1 wins
+		if(p1[0] == winningCombos[i][0]) {
+			if(p1[1] == winningCombos[i][1]) {
+				if(p1[2] == winningCombos[i][2]) {
+					alert('p1 wins');
+				}
+			}
+		}
+	}
+}
+
 function clickCell(id) {
 	// display player selection
-	if(document.getElementById(id).classList.contains('p0') || document.getElementById(id).classList.contains('p1')){
-		alert('Not a valid move');
-	}
-	else
-	{
+	if(checkCell(id) == true) {
 		// single player
 		if(pNum == 1){
-			// add class to html div
-			document.getElementById(id).className += " p0";
-
-			// add to p0 array
-			p0.push(parseInt(id,10));
-
-			// demote cell rank
-			cellRank[id] -= 99;
+			markCell(p, id);
+			demoteCell(id);
+			var aiCell = cellRank.indexOf(Math.max.apply(Math, cellRank));
+			markCell(1, aiCell);
+			demoteCell(aiCell);
+			p0.sort();
+			p1.sort();
+			checkWinner();
 		}
 		// two player
 		else if(pNum == 2) {
 			if(p == 0) {
-				// add class to html div
-				document.getElementById(id).className += " p0";
-
-				// add to p0 array
-				p0.push(parseInt(id,10));
-
-				// switch user
-				p = 1;
+				markCell(p, id);
+				switchUser(p);
 			}
 			else {
-				// add class to html div
-				document.getElementById(id).className += " p1";
-
-				// add to p1 array
-				p1.push(parseInt(id,10));
-
-				// switch user
-				p = 0;
+				markCell(p, id);
+				switchUser(p);
 			}
-			// check winning combinations
 			if(p0.length >= 3 || p1.length >= 3){
 				p0.sort();
 				p1.sort();
-				for(i=0; i<winningCombos.length; i++) {
-					// check if p0 wins
-					if(p0[0] == winningCombos[i][0]) {
-						if(p0[1] == winningCombos[i][1]) {
-							if(p0[2] == winningCombos[i][2]) {
-								alert('p0 wins');
-							}
-							else {
-								// A.I. should pick winningCombos[i][2]
-							}
-						}
-					}
-					// check if p1 wins
-					if(p1[0] == winningCombos[i][0]) {
-						if(p1[1] == winningCombos[i][1]) {
-							if(p1[2] == winningCombos[i][2]) {
-								alert('p1 wins');
-							}
-						}
-					}
-				}
+				checkWinner();
+				// checkWinner(p1);
 			}
 		}
+	}
+	else {
+		alert("Invalid choice")
 	}
 }
 
