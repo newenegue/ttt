@@ -43,15 +43,37 @@ h1 {
 }
 
 .cell:hover {
-	background-color: rgba(90,150,90,0.4);
+	background-color: rgba(150,150,150,0.5);
 }
 
 .p0 {
-	background-color: rgba(255,0,0,0.4);
+	background-image:url('img/grumpy.jpg');
+	background-size: 150px 150px;
 }
 
 .p1 {
-	background-color: rgba(0,0,255,0.4);
+	background-image:url('img/bday_dog.jpg');
+	background-size: 150px 150px;
+}
+
+.p0_win {
+	background-image:url('img/grumpy_zoom.jpg');
+	background-size: 150px 150px;
+}
+
+.p1_win {
+	background-image:url('img/bday_dog_zoom.jpg');
+	background-size: 150px 150px;
+}
+
+.p0_bw {
+	background-image:url('img/grumpy_bw.jpg');
+	background-size: 150px 150px;
+}
+
+.p1_bw {
+	background-image:url('img/bday_dog_bw.jpg');
+	background-size: 150px 150px;
 }
 
 
