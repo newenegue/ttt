@@ -9,7 +9,7 @@ var p0 = [];
 var p1 = [];
 
 // number of players
-var pNum = 1;
+var pNum = 0;
 
 // all winning combinations
 winningCombos = new Array(
@@ -35,6 +35,7 @@ function initEvents() {
 	for (var i = 0; i < cells.length; i++) {
 		cells[i].onclick=clickCell;
 	}
+
 }
 
 //--------------------------------------------------
@@ -46,9 +47,30 @@ function resetAll() {
 	p0 = [];
 	p1 = [];
 	cellRank = [3,2,3,2,4,2,3,2,3];
+	pNum = 0;
 	for(i = 0; i <= 8; i++){
 		document.getElementById(i).className = "cell";
 	}
+	return true;
+}
+
+//--------------------------------------------------
+// checkPlayers()
+// check radio buttons for number of players
+//--------------------------------------------------
+function checkPlayers(){
+	var radio = document.getElementsByName('numPlayers');
+	var rLength = radio.length;
+
+	if(pNum === 0){
+		for(var i = 0; i < rLength; i++){
+			if(radio[i].checked){
+				pNum = radio[i].value;
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 //--------------------------------------------------
@@ -84,6 +106,7 @@ function isFull() {
 //--------------------------------------------------
 function switchUser() {
 	p = p === 0 ? 1 : 0;
+	return true;
 }
 
 //--------------------------------------------------
@@ -92,6 +115,7 @@ function switchUser() {
 //--------------------------------------------------
 function demoteCell(cell_id) {
 	cellRank[cell_id] -= 99;
+	return true;
 }
 
 //--------------------------------------------------
@@ -100,20 +124,25 @@ function demoteCell(cell_id) {
 // adds a new class to the cell div
 //--------------------------------------------------
 function markCell(player, cell_id) {
+	var selectCell = document.getElementById(cell_id);
+	var cellId = parseInt(cell_id,10);
 	if(player === 0){
 		// add class to html div
-		document.getElementById(cell_id).className += " p0";
+		selectCell.className += " p0";
 
 		// add to p0 array
-		p0.push(parseInt(cell_id,10));
+		p0.push(cellId);
+		return true;
 	}
 	else if(player == 1) {
 		// add class to html div
-		document.getElementById(cell_id).className += " p1";
+		selectCell.className += " p1";
 
 		// add to p1 array
-		p1.push(parseInt(cell_id,10));
+		p1.push(cellId);
+		return true;
 	}
+	return false;
 }
 
 //--------------------------------------------------
@@ -161,6 +190,8 @@ function checkWinner() {
 			return true;
 		}
 	}
+
+	return false;
 }
 
 //--------------------------------------------------
@@ -170,6 +201,7 @@ function checkWinner() {
 function clickCell() {
 	
 	var id = this.id;
+	checkPlayers();
 	
 	if(emptyCell.call(this) === true) {
 		// single player
@@ -199,6 +231,9 @@ function clickCell() {
 					resetAll();
 				}
 			}
+		}
+		else{
+			alert('Number of players not selected!');
 		}
 	}
 	else {

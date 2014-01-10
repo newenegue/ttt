@@ -37,7 +37,7 @@ h1 {
 	width: 150px;
 	height: 150px;
 	background-color: rgba(200,200,200,0.5);
-	border-right: 5px solid white; 
+	border-right: 5px solid white;
 	border-bottom: 5px solid white;
 	float: left;
 }
@@ -53,6 +53,7 @@ h1 {
 .p1 {
 	background-color: rgba(0,0,255,0.4);
 }
+
 
 /*.clickCell:hover {
 	background-color: rgba(100,0,90,0.4);
