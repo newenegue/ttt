@@ -1,16 +1,17 @@
 //--------------------------------------------------
-//---Initialize global variables---
+// Initialize global variables
 //--------------------------------------------------
 // player toggle
 var p = 0;
-// p0 is always user
-var p0 = new Array();
-var p1 = new Array();
 
-// number of player toggle
+// player tracker
+var p0 = [];
+var p1 = [];
+
+// number of players
 var pNum = 1;
 
-// all possible winning combinations
+// all winning combinations
 winningCombos = new Array(
    new Array(0, 1, 2),
    new Array(3, 4, 5),
@@ -20,12 +21,78 @@ winningCombos = new Array(
    new Array(2, 5, 8),
    new Array(0, 4, 8),
    new Array(2, 4, 6)
-  ); 
+  );
 
 // cell ranking for A.I.
-// higher is better
 cellRank = [3,2,3,2,4,2,3,2,3];
 
+//--------------------------------------------------
+// initEvents()
+// initialize mouse click event handler for divs
+//--------------------------------------------------
+function initEvents() {
+	var cells = document.getElementsByClassName('cell');
+	for (var i = 0; i < cells.length; i++) {
+		cells[i].onclick=clickCell;
+	}
+}
+
+//--------------------------------------------------
+// resetAll()
+// Re-initialize and reset board
+//--------------------------------------------------
+function resetAll() {
+	p = 0;
+	p0 = [];
+	p1 = [];
+	cellRank = [3,2,3,2,4,2,3,2,3];
+	for(i = 0; i <= 8; i++){
+		document.getElementById(i).className = "cell";
+	}
+}
+
+//--------------------------------------------------
+// emptyCell()
+// check if cell is already selected
+//--------------------------------------------------
+function emptyCell() {
+	if(this.classList.contains('p0') || this.classList.contains('p1')){
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+//--------------------------------------------------
+// isFull()
+// check if all cells have been played
+//--------------------------------------------------
+function isFull() {
+	var totLength = p0.length + p1.length;
+	if(totLength == 9){
+		alert("Draw");
+		resetAll();
+		return true;
+	}
+	return false;
+}
+
+//--------------------------------------------------
+// switchUser()
+// switch user turn
+//--------------------------------------------------
+function switchUser() {
+	p = p === 0 ? 1 : 0;
+}
+
+//--------------------------------------------------
+// demoteCell()
+// AI cell rank demotion
+//--------------------------------------------------
+function demoteCell(cell_id) {
+	cellRank[cell_id] -= 99;
+}
 
 //--------------------------------------------------
 // markCell()
@@ -33,7 +100,7 @@ cellRank = [3,2,3,2,4,2,3,2,3];
 // adds a new class to the cell div
 //--------------------------------------------------
 function markCell(player, cell_id) {
-	if(player == 0){
+	if(player === 0){
 		// add class to html div
 		document.getElementById(cell_id).className += " p0";
 
@@ -50,118 +117,84 @@ function markCell(player, cell_id) {
 }
 
 //--------------------------------------------------
-// switchUser()
-// switch user turn
-//--------------------------------------------------
-function switchUser(player) {
-	if (player == 0) {
-		p = 1;
-	}
-	else if (player == 1) {
-		p = 0;
-	}
-}
-
-//--------------------------------------------------
-// demoteCell()
-// AI cell rank demotion
-// for selected cell
-//--------------------------------------------------
-function demoteCell(cell_id) {
-	cellRank[cell_id] -= 99;
-}
-
-//--------------------------------------------------
-// emptyCell()
-// check if cell is already selected by a player
-//--------------------------------------------------
-function emptyCell(cell_id) {
-	if(document.getElementById(cell_id).classList.contains('p0') || document.getElementById(cell_id).classList.contains('p1')){
-		return false;
-	}
-	else {
-		return true;
-	}
-}
-
-//--------------------------------------------------
 // checkWinner()
 // check for winning conditions
 //--------------------------------------------------
 function checkWinner() {
-	var winner = false;
-	for(i=0; i<winningCombos.length; i++) {
-		// check if p0 wins
-		if(p0[0] == winningCombos[i][0]) {
-			if(p0[1] == winningCombos[i][1]) {
-				if(p0[2] == winningCombos[i][2]) {
-					alert('p0 wins');
-					winner = true;
-					return winner;
-				}
-			}
-		}
-		// check if p1 wins
-		if(p1[0] == winningCombos[i][0]) {
-			if(p1[1] == winningCombos[i][1]) {
-				if(p1[2] == winningCombos[i][2]) {
-					alert('p1 wins');
-					winner = true;
-					return winner;
-				}
-			}
-		}
-	}
-}
 
-//--------------------------------------------------
-// resetAll()
-// Re-initialize and reset board
-//--------------------------------------------------
-function resetAll() {
-	for(i = 0; i <= 8; i++){
-		document.getElementById(i).className = "cell";
+	// for player 1 and AI cell selection
+	var empty = [];
+	var taken = [];
+	var i,j,k;
+	for(i = 0; i < winningCombos.length; i++){
+		empty = [];
+		taken = [];
+		for(j = 0; j < winningCombos[i].length; j++){
+			// taken and empty cell list
+			if(p0.indexOf(winningCombos[i][j]) > -1){
+				taken.push(winningCombos[i][j]);
+			}
+			else{
+				empty.push(winningCombos[i][j]);
+			}
+		}
+		// increase cellRank for AI
+		if(taken.length == 2 && cellRank[empty[0]] > 0){
+			cellRank[empty[0]] = 10;
+		}
+		else if(taken.length == 3){
+			alert('p0 wins');
+			return true;
+		}
+			
 	}
-	cellRank = [3,2,3,2,4,2,3,2,3];
-	p0 = new Array();
-	p1 = new Array();
-	p = 0;
+
+	// player 2 or computer winning combo check
+	for(i = 0; i < winningCombos.length; i++){
+		for(k = 0; k < winningCombos[i].length; k++){
+			if(p1.indexOf(winningCombos[i][k]) == -1){
+				break;
+			}
+		}
+		if(k == winningCombos[i].length){
+			alert('p1 wins');
+			return true;
+		}
+	}
 }
 
 //--------------------------------------------------
 // clickCell()
 // on click of cell
 //--------------------------------------------------
-function clickCell(id) {
-	// display player selection
-	if(emptyCell(id) == true) {
+function clickCell() {
+	
+	var id = this.id;
+	
+	if(emptyCell.call(this) === true) {
 		// single player
 		if(pNum == 1){
 			markCell(p, id);
 			demoteCell(id);
-			var aiCell = cellRank.indexOf(Math.max.apply(Math, cellRank));
-			markCell(1, aiCell);
-			demoteCell(aiCell);
-			
-			p0.sort();
-			p1.sort();
 			if(checkWinner()) {
 				resetAll();
 			}
+			else {
+				// find max priority cell
+				var aiCell = cellRank.indexOf(Math.max.apply(Math, cellRank));
+				markCell(1, aiCell);
+				demoteCell(aiCell);
+				if(checkWinner()) {
+					resetAll();
+				}
+			}
 		}
+		
 		// two player
 		else if(pNum == 2) {
-			if(p == 0) {
-				markCell(p, id);
-				switchUser(p);
-			}
-			else {
-				markCell(p, id);
-				switchUser(p);
-			}
+			markCell(p, id);
+			switchUser();
 			if(p0.length >= 3 || p1.length >= 3){
-				p0.sort();
-				p1.sort();
 				if(checkWinner()) {
 					resetAll();
 				}
@@ -169,7 +202,9 @@ function clickCell(id) {
 		}
 	}
 	else {
-		alert("Invalid choice")
+		alert("Invalid choice");
 	}
+	isFull();
 }
+
 
