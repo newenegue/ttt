@@ -1,24 +1,6 @@
-/*clearfix*/
-/*.clearfix:after {
-    content: ".";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0;
-}
- 
-.clearfix {
-    display: inline-block;
-}
- 
-html[xmlns] .clearfix {
-    display: block;
-}
- 
-* html .clearfix {
-    height: 1%;
-}*/
+.cf:before, .cf:after { content: ""; display: table; }
+.cf:after { clear: both; }
+.cf { zoom: 1; }
 
 
 h1 {
@@ -30,11 +12,9 @@ body {
 }
 
 .row {
-	width: 500px;
+	width: 465px;
 	height: 150px;
 	margin: 0 auto;
-	/*background-color: red;*/
-	clear: both;
 }
 
 .cell {
@@ -81,4 +61,20 @@ body {
 .p1_bw {
 	/*background-image:url('img/bday_dog_bw.jpg');*/
 	/*background-size: 150px 150px;*/
+}
+
+.spoon {
+	background-image:url('img/spoon.png');
+	background-size: 200px 200px;
+	width: 200px;
+	height: 200px;
+	/*background-color: black;*/
+}
+
+.settings {
+	z-index: -1;
+	background-color: rgba(10,10,10,0.2);
+	width: 300px;
+	height: 300px;
+	margin: 0 auto;
 }

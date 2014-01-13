@@ -184,6 +184,7 @@ function checkWinner() {
 	var taken = [];
 	var i,j,k;
 	for(i = 0; i < winningCombos.length; i++){
+		// j = i % 3 [0-2]
 		empty = [];
 		taken = [];
 		for(j = 0; j < winningCombos[i].length; j++){
