@@ -3,36 +3,46 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link href='http://fonts.googleapis.com/css?family=Arvo:400,400italic' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="script.js"></script>
 	<title>TicTacToe</title>
-	<script type="text/javascript">
-		document.getElementById()
-	</script>
 </head>
 <body style="font-family: Arial" onload="initEvents()">
-	<h1>Tic Tac Toe</h1>
-	<div class="row cf" id="r0">
-		<div class="cell" id="0"></div>
-		<div class="cell" id="1"></div>
-		<div class="cell" id="2"></div>
-	</div>
-	<div class="row cf" id="r1">
-		<div class="cell" id="3"></div>
-		<div class="cell" id="4"></div>
-		<div class="cell" id="5"></div>
-	</div>
-	<div class="row cf" id="r2">
-		<div class="cell" id="6"></div>
-		<div class="cell" id="7"></div>
-		<div class="cell" id="8"></div>
+	<div class="board cf">
+		<div class="row cf" id="r0">
+			<div class="cell" id="0"></div>
+			<div class="cell" id="1"></div>
+			<div class="cell" id="2"></div>
+		</div>
+		<div class="row cf" id="r1">
+			<div class="cell" id="3"></div>
+			<div class="cell" id="4">
+				<div class="startGame" onclick="selectGame()"><b>Play</b></div>
+				<div class="selectGame"><b>Select</b> <i>Game</i></div>
+			</div>
+			<div class="cell" id="5"></div>
+		</div>
+		<div class="row cf" id="r2">
+			<div class="cell" id="6"></div>
+			<div class="cell" id="7"></div>
+			<div class="cell" id="8"></div>
+		</div>
 	</div>
 	<div class="spoon"></div>
-	<div class="settings"></div>
+	<div class="choco"></div>
+	<div class="overlay">
+		<div class="closeSettings" onclick="closeSettings()"></div>
+		<div class="settings">
+			<form>
+				<input type="radio" name="numPlayers" value="1">1 Player<br />
+				<input type="radio" name="numPlayers" value="2">2 Players<br /><br />
+				<input type="radio" name="macPlayer" value="1">Coconut<br />
+				<input type="radio" name="macPlayer" value="2">Hazelnut
+			</form>
+		</div>
+	</div>
 	<br />
-	<form>
-		<input type="radio" name="numPlayers" value="1">1 Player<br />
-		<input type="radio" name="numPlayers" value="2">2 Players
-	</form>
 	<button type="button" onclick="resetAll()">New Game</button>
+	<button type="button" onclick="showSettings()">Settings</button>
 </body>
 </html>

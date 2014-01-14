@@ -4,6 +4,8 @@
 // player toggle
 var p = 0;
 
+var newGame = true;
+
 // player tracker
 var p0 = [];
 var p1 = [];
@@ -46,16 +48,43 @@ function initEvents() {
 // Re-initialize and reset board
 //--------------------------------------------------
 function resetAll() {
-	p = 0;
-	p0 = [];
-	p1 = [];
-	cellRank = [3,2,3,2,4,2,3,2,3];
-	pNum = 0;
-	winner = false;
-	for(i = 0; i <= 8; i++){
-		document.getElementById(i).className = "cell";
+	if(newGame){
+		showSettings();
+		newGame = false;
+		// console.log(pNum);
+		// console.log(newGame);
 	}
-	return true;
+	else{
+		p = 0;
+		p0 = [];
+		p1 = [];
+		cellRank = [3,2,3,2,4,2,3,2,3];
+		pNum = 0;
+		winner = false;
+		newGame = 0;
+		for(i = 0; i <= 8; i++){
+			document.getElementById(i).className = "cell";
+		}
+		return true;
+	}
+}
+
+function selectGame() {
+	var start = document.getElementsByClassName("startGame")[0];
+	var select = document.getElementsByClassName("selectGame")[0];
+	start.style.display = 'none';
+	select.style.display = 'block';
+}
+
+function showSettings() {
+	console.log(document.getElementsByClassName('settings')[0]);
+	document.getElementsByClassName('overlay')[0].style.display = 'block';
+	document.getElementsByClassName('settings')[0].style.display = 'block';
+}
+
+function closeSettings() {
+	document.getElementsByClassName('overlay')[0].style.display = 'none';	
+	document.getElementsByClassName('settings')[0].style.display = 'none';
 }
 
 //--------------------------------------------------
@@ -74,7 +103,6 @@ function checkPlayers(){
 			}
 		}
 	}
-	return false;
 }
 
 //--------------------------------------------------
@@ -98,7 +126,7 @@ function isFull() {
 	var totLength = p0.length + p1.length;
 	if(totLength == 9 && winner === false){
 		alert("Draw");
-		resetAll();
+		// resetAll();
 		return true;
 	}
 	return false;
@@ -263,7 +291,7 @@ function clickCell() {
 			switchUser();
 		}
 		else{
-			alert('Number of players not selected!');
+			// alert('Number of players not selected!');
 		}
 	}
 	else{
